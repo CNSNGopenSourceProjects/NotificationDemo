@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context="br.com.conseng.notificationdemo.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_notification_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickOpenActivity"
+            android:text="@string/open_activity" />
+
+        <Button
+            android:id="@+id/btn_big_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickBigContent"
+            android:text="@string/big_content" />
+    </LinearLayout>
+</ScrollView>

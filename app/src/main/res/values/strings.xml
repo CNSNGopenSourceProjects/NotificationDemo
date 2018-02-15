@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Notification Demo</string>
+    <string name="open_activity">Notification that opens Activity</string>
+    <string name="big_content">Notification that lauch Big Content</string>
+</resources>
