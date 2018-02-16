@@ -16,6 +16,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <receiver android:name=".NotificationBroadcast">
+            <intent-filter>
+                <action android:name="br.com.conseng.notificationdemo.previous" />
+                <action android:name="br.com.conseng.notificationdemo.delete" />
+                <action android:name="br.com.conseng.notificationdemo.pause" />
+                <action android:name="br.com.conseng.notificationdemo.play" />
+                <action android:name="br.com.conseng.notificationdemo.next" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

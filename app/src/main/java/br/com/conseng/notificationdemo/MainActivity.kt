@@ -4,16 +4,20 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * Para poder executar este exemplo foi necessário incluir a dependência: 'com.android.support:support-v4:26.1.0'
  * @see [https://www.youtube.com/watch?v=VouATjZdIWo]
+ * @see [https://developer.android.com/training/notify-user/expanded.html]
  */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var btnOpenActivity: Button
     private lateinit var btnBigContent: Button
+
+    private var ng: NotificationGenerator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,11 +30,18 @@ class MainActivity : AppCompatActivity() {
     /**
      * Create the notification that open the ativity.
      */
-    fun onClickOpenActivity (view: View) {
-        NotificationGenerator().openActivityNotification(applicationContext)
+    fun onClickOpenActivity(view: View) {
+        if (null == ng) ng = NotificationGenerator()
+        ng!!.openActivityNotification(applicationContext)
+        Toast.makeText(this, getString(R.string.msg_notification_sent), Toast.LENGTH_SHORT).show()
     }
 
-    fun onClickBigContent (view: View) {
-        // TODO:
+    /**
+     * Show a notification with big content (music control).
+     */
+    fun onClickBigContent(view: View) {
+        if (null == ng) ng = NotificationGenerator()
+        ng!!.customBigNotification(applicationContext)
+        Toast.makeText(this, getString(R.string.msg_big_notification), Toast.LENGTH_SHORT).show()
     }
 }
