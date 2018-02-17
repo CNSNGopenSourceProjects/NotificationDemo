@@ -1,28 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context="br.com.conseng.notificationdemo.MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <TextView
+        android:id="@+id/txt_on_activity1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/on_main_activity"
+        android:textSize="30sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/btn_notification_activity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickOpenActivity"
-            android:text="@string/open_activity" />
+    <Button
+        android:id="@+id/btn_next_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginTop="32dp"
+        android:onClick="onClickGoToActivity2"
+        android:text="@string/go_to_notification_test"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_on_activity1" />
 
-        <Button
-            android:id="@+id/btn_big_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickBigContent"
-            android:text="@string/big_content" />
-    </LinearLayout>
-</ScrollView>
+    <Button
+        android:id="@+id/btn_terminate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginTop="32dp"
+        android:text="Terminate this APP"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_next_activity"
+        android:onClick="onClickTerminate"/>
+</android.support.constraint.ConstraintLayout>

@@ -1,47 +1,78 @@
 package br.com.conseng.notificationdemo
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
- * Para poder executar este exemplo foi necessário incluir a dependência: 'com.android.support:support-v4:26.1.0'
- * @see [https://www.youtube.com/watch?v=VouATjZdIWo]
- * @see [https://developer.android.com/training/notify-user/expanded.html]
+ * Cria uma Activity inicial para verificar como se comporta uma notificação que retorna a
+ * uma activity outra que não a principal.  Para a correta navegação, o MANIFESTO foi
+ * atualizado para identificar o parentesco corretamente entre as Activities.
  */
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var btnOpenActivity: Button
-    private lateinit var btnBigContent: Button
-
-    private var ng: NotificationGenerator? = null
+    private val TAG = "Activity MAIN"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btnOpenActivity = btn_notification_activity
-        btnBigContent = btn_big_content
+        printCurrentState("onCreate")
     }
 
     /**
-     * Create the notification that open the ativity.
+     * Open the notification demo screen.
      */
-    fun onClickOpenActivity(view: View) {
-        if (null == ng) ng = NotificationGenerator()
-        ng!!.openActivityNotification(applicationContext)
-        Toast.makeText(this, getString(R.string.msg_notification_sent), Toast.LENGTH_SHORT).show()
+    fun onClickGoToActivity2(v: View) {
+        val intent= Intent(this, NotificationActivity::class.java)
+        startActivity(intent)
     }
 
     /**
-     * Show a notification with big content (music control).
+     * Terminate this app.
      */
-    fun onClickBigContent(view: View) {
-        if (null == ng) ng = NotificationGenerator()
-        ng!!.customBigNotification(applicationContext)
-        Toast.makeText(this, getString(R.string.msg_big_notification), Toast.LENGTH_SHORT).show()
+    fun onClickTerminate(v: View) {
+        this.finish()
+        System.exit(0)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        printCurrentState("onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        printCurrentState("onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        printCurrentState("onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        printCurrentState("onStop")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        printCurrentState("onRestart")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        printCurrentState("onDestroy")
+    }
+
+    private fun printCurrentState(estado:String) {
+        Log.d(TAG, "state=$estado")
+//        println("$TAG : state=$estado")
     }
 }

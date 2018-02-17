@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,6 +19,15 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".NotificationActivity"
+            android:label="@string/label_activity2"
+            android:parentActivityName=".MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.conseng.notificationdemo.MainActivity" />
+        </activity>
 
         <receiver android:name=".NotificationBroadcast">
             <intent-filter>
@@ -27,6 +38,7 @@
                 <action android:name="br.com.conseng.notificationdemo.next" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

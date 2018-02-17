@@ -4,4 +4,7 @@
     <string name="big_content">Notification that lauch Big Content</string>
     <string name="msg_notification_sent">Criando uma notificação para abrir a APP</string>
     <string name="msg_big_notification">Acrescentada uma notificação com funcionalidade</string>
+    <string name="label_activity2">Notification Test View</string>
+    <string name="on_main_activity">On Main Activity</string>
+    <string name="go_to_notification_test">Go to Notification Test</string>
 </resources>
