@@ -1,13 +1,15 @@
 package br.com.conseng.notificationdemo
 
 import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.os.Build
 import android.os.Build.VERSION_CODES.O
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.TaskStackBuilder
 import android.widget.RemoteViews
 
 const val NOTIFY_PREVIOUS = "br.com.conseng.notificationdemo.previous"
@@ -21,58 +23,59 @@ const val NOTIFICATION_ID_BIG_CONTENT = 99
 
 /**
  * Class to generate the notification to open the Activity.
+ * @property [notificationIntentClass] The component class that is to be used for the notification intent.
+ *           The default class, for this example, is [NotificationActivity].
  * @see [http://www.vogella.com/tutorials/AndroidNotifications/article.html]
  * @see [https://www.youtube.com/watch?v=VouATjZdIWo]
  * @see [https://www.youtube.com/watch?v=3FJNOrfBQEA]
  * @see [https://www.youtube.com/watch?v=wMS-m29zH20]
  */
-class NotificationGenerator {
+class NotificationGenerator(var notificationIntentClass: Class<*> = NotificationActivity::class.java) {
+
+    private var notificationManager: NotificationManager? = null
+    private var notificationChannel: NotificationChannel? = null
+    private val channelId = "br.com.conseng.notificationdemo"
+    private val description = "Test notification"
 
     /**
      * Create a notification that calls the activity when clicked.
      * Para poder recompor a estruturas das activities, é necessário declarar o parentesco no manifesto
      * e incluir o atributo launchMode="singleInstance" para MainActivity a fim de que esta exista ao sair
      * da NotificationActivity.
+     * @param [context] application context for associate the notification with.
      */
     fun openActivityNotification(context: Context) {
-        // prepare intent which is triggered if the notification is selected
-        val intent = Intent(context, NotificationActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        // build notification
-        val nBuilder = NotificationCompat.Builder(context, "default")
-                .setContentTitle("Notification Demo title")
-                .setContentText("Please, click here to start the activity")
-                .setSmallIcon(R.drawable.ic_stat_notification)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
+        val nBuilder = getNotificationBuilder(context,
+                "Notification Demo title",
+                "Please, click here to start the activity",
+                R.drawable.ic_stat_notification)
 
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(NOTIFICATION_ID_OPEN_ACTIVITY, nBuilder.build())
+        notificationManager?.notify(NOTIFICATION_ID_OPEN_ACTIVITY, nBuilder.build())
     }
 
     /**
      * Create a notification with big content (music control).
+     * @param [context] application context for associate the notification with.
      */
     fun customBigNotification(context: Context) {
         val expandedView = RemoteViews(context.packageName, R.layout.big_notification)
         expandedView.setTextViewText(R.id.lo_text_song_name, "Adele")
         setListeners(expandedView, context)
 
-        val notifyIntent = Intent(context, NotificationActivity::class.java)
-        notifyIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        val pendingIntent = PendingIntent.getActivity(context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val nBuilder = getNotificationBuilder(context,
+                "Music Player",
+                "Control Audio",
+                R.drawable.ic_stat_big_content)
+        lateinit var notification: Notification
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            nBuilder.setCustomBigContentView(expandedView)
+            notification = nBuilder.build()
+        } else {
+            notification = nBuilder.build()
+            notification.bigContentView = expandedView
+        }
 
-        val nBuilder = NotificationCompat.Builder(context)
-                .setContentIntent(pendingIntent)
-                .setSmallIcon(R.drawable.ic_stat_big_content)
-                .setAutoCancel(true)
-                .setCustomBigContentView(expandedView)
-                .setContentTitle("Music Player")
-                .setContentText("Control Audio")
-
-        val notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(NOTIFICATION_ID_BIG_CONTENT, nBuilder.build())
+        notificationManager?.notify(NOTIFICATION_ID_BIG_CONTENT, notification)
     }
 
     /**
@@ -98,5 +101,60 @@ class NotificationGenerator {
         val intentPlay = Intent(NOTIFY_PLAY)
         val pendingIntentPlay = PendingIntent.getBroadcast(context, O, intentPlay, PendingIntent.FLAG_UPDATE_CURRENT)
         view.setOnClickPendingIntent(R.id.btn_previous, pendingIntentPlay)
+    }
+
+    /**
+     * Initialize the notification manager and channel Id.
+     * The notification builder has the basic initialization:
+     *     - AutoCancel=true
+     *     - LargeIcon = SmallIcon
+     * @param [context] application context for associate the notification with.
+     * @param [notificationTitle] notification title.
+     * @param [notificationText] notification text.
+     * @param [notificationIconId] notification icon id from application resource.
+     * @return the PendingIntent to be used on this notification.
+     */
+    private fun getNotificationBuilder(context: Context,
+                                       notificationTitle: String, notificationText: String, notificationIconId: Int): Notification.Builder {
+        if (null == notificationManager) {
+            notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        }
+
+        val intent = getIntent(context)
+        val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        lateinit var builder: Notification.Builder
+        if (Build.VERSION.SDK_INT >= O) {
+            if (null == notificationChannel) {
+                notificationChannel = NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
+                notificationChannel?.enableLights(true)
+                notificationChannel?.lightColor = Color.GREEN
+                notificationChannel?.enableVibration(false)
+                notificationManager?.createNotificationChannel(notificationChannel)
+            }
+            builder = Notification.Builder(context, channelId)
+        } else {
+            builder = Notification.Builder(context)
+        }
+
+        builder.setContentTitle(notificationTitle)
+                .setContentText(notificationText)
+                .setSmallIcon(notificationIconId)
+                .setLargeIcon(BitmapFactory.decodeResource(context.resources, notificationIconId))
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+
+        return builder
+    }
+
+    /**
+     * Retorna a Intent que será utilizada nesta notificação.
+     * @param [context] application context for associate the notification with.
+     * @return the activity associated to the notification.
+     */
+    private fun getIntent(context: Context): Intent {
+        val intent = Intent(context, notificationIntentClass)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        return intent
     }
 }
