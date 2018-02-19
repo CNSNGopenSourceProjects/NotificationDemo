@@ -12,25 +12,47 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btn_notification_activity"
+            android:id="@+id/btn_regular_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClickOpenActivity"
-            android:text="@string/open_activity" />
+            android:onClick="showNotification"
+            android:text="@string/txt_btn_regular_notification" />
 
         <Button
-            android:id="@+id/btn_big_content"
+            android:id="@+id/btn_music_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClickBigContent"
-            android:text="@string/big_content" />
+            android:onClick="showNotification"
+            android:text="@string/txt_btn_music_notification" />
+
         <Button
+            android:id="@+id/btn_big_text_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="showNotification"
+            android:text="@string/txt_btn_big_text_notification" />
+
+        <Button
+            android:id="@+id/btn_big_picture_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="showNotification"
+            android:text="@string/txt_btn_big_picture_notification" />
+
+        <Button
+            android:id="@+id/btn_big_inbox_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="showNotification"
+            android:text="@string/txt_btn_big_inbox_notification" />
+
+        <Button
+            android:id="@+id/btn_go_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_go_back"
-            android:onClick="onClickGoBack"
-            android:text="Return to previous Activity"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="32dp"/>
+            android:layout_margin="32dp"
+            android:onClick="showNotification"
+            android:text="Return to previous Activity" />
     </LinearLayout>
 </ScrollView>

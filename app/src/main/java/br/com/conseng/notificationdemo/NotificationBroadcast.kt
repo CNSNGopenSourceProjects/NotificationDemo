@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.NotificationCompat
+import android.util.Log
 import android.widget.Toast
 
 /**
@@ -17,6 +18,7 @@ class NotificationBroadcast : BroadcastReceiver() {
      * @see [https://www.youtube.com/watch?v=wMS-m29zH20]
      */
     override fun onReceive(context: Context, intent: Intent) {
+        Log.d("OnReceiver", "action=${intent.action.toString()}")
         when (intent.action) {
             NOTIFY_PREVIOUS -> {
                 Toast.makeText(context, "Handle the PREVIOUS button", Toast.LENGTH_LONG).show()

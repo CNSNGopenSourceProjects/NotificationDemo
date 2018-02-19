@@ -1,10 +1,16 @@
 <resources>
     <string name="app_name">Notification Demo</string>
-    <string name="open_activity">Notification that opens Activity</string>
-    <string name="big_content">Notification that lauch Big Content</string>
-    <string name="msg_notification_sent">Criando uma notificação para abrir a APP</string>
-    <string name="msg_big_notification">Acrescentada uma notificação com funcionalidade</string>
+    <string name="txt_btn_regular_notification">Show Regular Notification</string>
+    <string name="txt_btn_music_notification">Show Big Content Notification - music</string>
+    <string name="msg_regular_notification_sent">Sent a regular notification. Click to on it to open the App.</string>
+    <string name="msg_big_notification_music_sent">Sent a big content notification with action buttons.</string>
+    <string name="msg_big_notification_text_sent">Sent a big content text style notification.</string>
+    <string name="msg_big_notification_picture_sent">Sent a big content picture style notification.</string>
+    <string name="msg_big_notification_inbox_sent">Sent a big content inbox style notification.</string>
     <string name="label_activity2">Notification Test View</string>
     <string name="on_main_activity">On Main Activity</string>
     <string name="go_to_notification_test">Go to Notification Test</string>
+    <string name="txt_btn_big_text_notification">Show Big Text Notification</string>
+    <string name="txt_btn_big_picture_notification">Show Big Picture Notification</string>
+    <string name="txt_btn_big_inbox_notification">Show Big Inbox Notification</string>
 </resources>

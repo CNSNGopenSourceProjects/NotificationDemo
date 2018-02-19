@@ -1,11 +1,10 @@
 package br.com.conseng.notificationdemo
 
-import android.app.Activity
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 
 /**
  * Para poder executar este exemplo foi necessário incluir a dependência: 'com.android.support:support-v4:26.1.0'
@@ -26,27 +25,37 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     /**
-     * Create the notification that open the ativity.
+     * Handle all notification test buttons.
+     * @param [view] identify the button.
      */
-    fun onClickOpenActivity(view: View) {
+    fun showNotification(view: View) {
         if (null == ng) ng = NotificationGenerator()
-        ng!!.openActivityNotification(applicationContext)
-        Toast.makeText(this, getString(R.string.msg_notification_sent), Toast.LENGTH_SHORT).show()
-    }
 
-    /**
-     * Go back to the previous activity, using the parent declared on manifest.
-     */
-    fun onClickGoBack (view: View) {
-        this.finish()
-    }
-    /**
-     * Show a notification with big content (music control).
-     */
-    fun onClickBigContent(view: View) {
-        if (null == ng) ng = NotificationGenerator()
-        ng!!.customBigNotification(applicationContext)
-        Toast.makeText(this, getString(R.string.msg_big_notification), Toast.LENGTH_SHORT).show()
+        when (view.id) {
+            R.id.btn_regular_notification -> {
+                ng!!.showRegularNotification(applicationContext)
+                Toast.makeText(this, getString(R.string.msg_regular_notification_sent), Toast.LENGTH_SHORT).show()
+            }
+            R.id.btn_music_notification -> {
+                ng!!.customBigNotification(applicationContext)
+                Toast.makeText(this, getString(R.string.msg_big_notification_music_sent), Toast.LENGTH_SHORT).show()
+            }
+            R.id.btn_big_text_notification -> {
+                ng!!.showBigTextNotification(applicationContext)
+                Toast.makeText(this, getString(R.string.msg_big_notification_text_sent), Toast.LENGTH_SHORT).show()
+            }
+            R.id.btn_big_picture_notification -> {
+                ng!!.showBigPictureNotification(applicationContext)
+                Toast.makeText(this, getString(R.string.msg_big_notification_picture_sent), Toast.LENGTH_SHORT).show()
+            }
+            R.id.btn_big_inbox_notification -> {
+                ng!!.showBigInboxNotification(applicationContext)
+                Toast.makeText(this, getString(R.string.msg_big_notification_inbox_sent), Toast.LENGTH_SHORT).show()
+            }
+            R.id.btn_go_back -> {
+                this.finish()
+            }
+        }
     }
 
     override fun onStart() {
@@ -79,7 +88,7 @@ class NotificationActivity : AppCompatActivity() {
         printCurrentState("onDestroy")
     }
 
-    private fun printCurrentState(estado:String) {
+    private fun printCurrentState(estado: String) {
         Log.d(TAG, "state=$estado")
 //        println("$TAG : state=$estado")
     }
