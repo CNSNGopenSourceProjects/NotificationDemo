@@ -37,7 +37,7 @@ class NotificationActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.msg_regular_notification_sent), Toast.LENGTH_SHORT).show()
             }
             R.id.btn_music_notification -> {
-                ng!!.customBigNotification(applicationContext)
+                ng!!.showBigContentMusicPlayer(applicationContext)
                 Toast.makeText(this, getString(R.string.msg_big_notification_music_sent), Toast.LENGTH_SHORT).show()
             }
             R.id.btn_big_text_notification -> {
@@ -59,33 +59,33 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        super.onStart()
         printCurrentState("onStart")
+        super.onStart()
     }
 
     override fun onResume() {
-        super.onResume()
         printCurrentState("onResume")
+        super.onResume()
     }
 
     override fun onPause() {
-        super.onPause()
         printCurrentState("onPause")
+        super.onPause()
     }
 
     override fun onStop() {
-        super.onStop()
         printCurrentState("onStop")
+        super.onStop()
     }
 
     override fun onRestart() {
-        super.onRestart()
         printCurrentState("onRestart")
+        super.onRestart()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         printCurrentState("onDestroy")
+        super.onDestroy()
     }
 
     private fun printCurrentState(estado: String) {

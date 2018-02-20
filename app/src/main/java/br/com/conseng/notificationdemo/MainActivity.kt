@@ -2,12 +2,10 @@ package br.com.conseng.notificationdemo
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import kotlinx.android.synthetic.main.activity_main.*
+import android.os.Process       // This shouldn't be Java
 
 /**
  * Cria uma Activity inicial para verificar como se comporta uma notificação que retorna a
@@ -38,37 +36,38 @@ class MainActivity : AppCompatActivity() {
      */
     fun onClickTerminate(v: View) {
         this.finish()
-        System.exit(0)
+//        System.exit(0)
     }
 
     override fun onStart() {
-        super.onStart()
         printCurrentState("onStart")
+        super.onStart()
     }
 
     override fun onResume() {
-        super.onResume()
         printCurrentState("onResume")
+        super.onResume()
     }
 
     override fun onPause() {
-        super.onPause()
         printCurrentState("onPause")
+        super.onPause()
     }
 
     override fun onStop() {
-        super.onStop()
         printCurrentState("onStop")
+        super.onStop()
     }
 
     override fun onRestart() {
-        super.onRestart()
         printCurrentState("onRestart")
+        super.onRestart()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         printCurrentState("onDestroy")
+//        Process.killProcess(Process.myPid())
+        super.onDestroy()
     }
 
     private fun printCurrentState(estado:String) {

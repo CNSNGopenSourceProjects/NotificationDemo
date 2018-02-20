@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@android:color/black">
+
+    <ImageView
+        android:id="@+id/status_bar_album_art"
+        android:layout_width="@dimen/status_bar_album_art"
+        android:layout_height="@dimen/status_bar_album_art"
+        android:visibility="gone"
+        android:gravity="center"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/status_bar_icon"
+        android:layout_width="@dimen/status_bar_album_art"
+        android:layout_height="@dimen/status_bar_album_art"
+        android:background="@drawable/status_bg"
+        android:scaleType="center"
+        android:src="@mipmap/ic_launcher"
+        android:visibility="visible"
+        tools:ignore="ContentDescription" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/status_bar_button_info_container_padding_left"
+        android:paddingStart="@dimen/status_bar_button_info_container_padding_left">
+
+        <TextView
+            android:id="@+id/status_bar_track_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            android:text="@string/dummy_track_name"/>
+
+        <TextView
+            android:id="@+id/status_bar_artist_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:text="@string/dummy_artist_name"/>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/status_bar_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/cd_play"
+        android:background="@drawable/status_bg"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/apollo_holo_dark_play" />
+
+    <ImageButton
+        android:id="@+id/status_bar_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/cd_next"
+        android:background="@drawable/status_bg"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/apollo_holo_dark_next" />
+
+    <ImageButton
+        android:id="@+id/status_bar_collapse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/apollo_holo_dark_notification_bar_collapse"
+        android:background="@drawable/status_bg"
+        android:layout_gravity="center_vertical"
+        tools:ignore="ContentDescription" />
+</LinearLayout>

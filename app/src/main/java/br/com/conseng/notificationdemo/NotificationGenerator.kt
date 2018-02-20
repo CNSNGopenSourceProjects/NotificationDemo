@@ -1,12 +1,16 @@
 package br.com.conseng.notificationdemo
 
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import android.os.Build.VERSION_CODES.O
+import android.view.View
 import android.widget.RemoteViews
 
 const val NOTIFY_PREVIOUS = "br.com.conseng.notificationdemo.previous"
@@ -40,9 +44,6 @@ class NotificationGenerator(var notificationIntentClass: Class<*> = Notification
 
     /**
      * Create a notification that calls the activity when clicked.
-     * Para poder recompor a estruturas das activities, é necessário declarar o parentesco no manifesto
-     * e incluir o atributo launchMode="singleInstance" para MainActivity a fim de que esta exista ao sair
-     * da NotificationActivity.
      * @param [context] application context for associate the notification with.
      */
     fun showRegularNotification(context: Context) {
@@ -58,6 +59,46 @@ class NotificationGenerator(var notificationIntentClass: Class<*> = Notification
     }
 
     /**
+     * Creates a Custom Notifications that is usually used by music player apps.
+     * @param [context] application context for associate the notification with.
+     * @see [http://www.tutorialsface.com/2015/08/android-custom-notification-tutorial/]
+     */
+    fun showBigContentMusicPlayer(context: Context) {
+        // Using RemoteViews to bind custom layouts into Notification
+        val smallView = RemoteViews(context.packageName, R.layout.status_bar)
+        val bigView = RemoteViews(context.packageName, R.layout.status_bar_expanded)
+
+        // showing default album image
+        smallView.setViewVisibility(R.id.status_bar_icon, View.VISIBLE)
+        smallView.setViewVisibility(R.id.status_bar_album_art, View.GONE)
+        bigView.setImageViewBitmap(R.id.status_bar_album_art, BitmapFactory.decodeResource(context.resources, R.drawable.default_album_picture))
+        setListeners(bigView, smallView, context)
+
+        // Build the content of the notification
+        val nBuilder = getNotificationBuilder(context,
+                "Music Player",
+                "Control Audio",
+                R.drawable.ic_stat_big_content,
+                "Illustrate how a big content notification can be created.")
+
+        // Notification through notification manager
+        lateinit var notification: Notification
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            nBuilder.setCustomBigContentView(bigView)
+            nBuilder.setCustomContentView(smallView)
+            notification = nBuilder.build()
+        } else {
+            notification = nBuilder.build()
+            notification.contentView = smallView
+            notification.bigContentView = bigView
+        }
+
+        // Notification through notification manager
+        notification.flags=Notification.FLAG_ONGOING_EVENT
+        notificationManager?.notify(NOTIFICATION_ID_BIG_CONTENT, notification)
+    }
+
+    /**
      * Create a notification with big content (music control).
      * The normal view layout is limited to 64dp, while the expanded view is limited to 256dp.
      * @param [context] application context for associate the notification with.
@@ -66,7 +107,7 @@ class NotificationGenerator(var notificationIntentClass: Class<*> = Notification
     fun customBigNotification(context: Context) {
         val expandedView = RemoteViews(context.packageName, R.layout.big_notification)
         expandedView.setTextViewText(R.id.lo_text_song_name, "Adele")
-        setListeners(expandedView, context)
+//        setListeners(expandedView, context)
 
         // Build the content of the notification
         val nBuilder = getNotificationBuilder(context,
@@ -97,7 +138,7 @@ class NotificationGenerator(var notificationIntentClass: Class<*> = Notification
         val title = "Big Text Notification"
         val text = "Show a large text notification."
         val bigText = "Provide the longer text to be displayed in the big form of the " +
-                "template in place of the content text. \n"+
+                "template in place of the content text. \n" +
                 "The size of this text should be longer without compromise the notification presentation."
 
         // Assign a style of Big Text
@@ -175,27 +216,38 @@ class NotificationGenerator(var notificationIntentClass: Class<*> = Notification
 
     /**
      * Handle the control buttons.
+     * @param [bigView] remote view for big content.
+     * @param [smallView] remote view for regular content.
+     * @param [context] application context for associate the notification with.
      */
-    private fun setListeners(view: RemoteViews, context: Context) {
+    private fun setListeners(bigView: RemoteViews, smallView: RemoteViews, context: Context) {
         val intentPrevious = Intent(NOTIFY_PREVIOUS)
-        val pendingIntentPrevious = PendingIntent.getBroadcast(context, O, intentPrevious, PendingIntent.FLAG_UPDATE_CURRENT)
-        view.setOnClickPendingIntent(R.id.btn_previous, pendingIntentPrevious)
+        val pendingIntentPrevious = PendingIntent.getBroadcast(context, 0, intentPrevious, PendingIntent.FLAG_UPDATE_CURRENT)
+        bigView.setOnClickPendingIntent(R.id.status_bar_prev, pendingIntentPrevious)
+        smallView.setOnClickPendingIntent(R.id.status_bar_prev, pendingIntentPrevious)
 
         val intentDelete = Intent(NOTIFY_DELETE)
-        val pendingIntentDelete = PendingIntent.getBroadcast(context, O, intentDelete, PendingIntent.FLAG_UPDATE_CURRENT)
-        view.setOnClickPendingIntent(R.id.btn_previous, pendingIntentDelete)
-
-        val intentPause = Intent(NOTIFY_PAUSE)
-        val pendingIntentPause = PendingIntent.getBroadcast(context, O, intentPause, PendingIntent.FLAG_UPDATE_CURRENT)
-        view.setOnClickPendingIntent(R.id.btn_previous, pendingIntentPause)
+        val pendingIntentDelete = PendingIntent.getBroadcast(context, 0, intentDelete, PendingIntent.FLAG_UPDATE_CURRENT)
+        bigView.setOnClickPendingIntent(R.id.status_bar_collapse, pendingIntentDelete)
+        smallView.setOnClickPendingIntent(R.id.status_bar_collapse, pendingIntentDelete)
 
         val intentNext = Intent(NOTIFY_NEXT)
-        val pendingIntentNext = PendingIntent.getBroadcast(context, O, intentNext, PendingIntent.FLAG_UPDATE_CURRENT)
-        view.setOnClickPendingIntent(R.id.btn_previous, pendingIntentNext)
+        val pendingIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, PendingIntent.FLAG_UPDATE_CURRENT)
+        bigView.setOnClickPendingIntent(R.id.status_bar_next, pendingIntentNext)
+        smallView.setOnClickPendingIntent(R.id.status_bar_next, pendingIntentNext)
 
         val intentPlay = Intent(NOTIFY_PLAY)
-        val pendingIntentPlay = PendingIntent.getBroadcast(context, O, intentPlay, PendingIntent.FLAG_UPDATE_CURRENT)
-        view.setOnClickPendingIntent(R.id.btn_previous, pendingIntentPlay)
+        val pendingIntentPlay = PendingIntent.getBroadcast(context, 0, intentPlay, PendingIntent.FLAG_UPDATE_CURRENT)
+        bigView.setOnClickPendingIntent(R.id.status_bar_play, pendingIntentPlay)
+        smallView.setOnClickPendingIntent(R.id.status_bar_play, pendingIntentPlay)
+
+        bigView.setTextViewText(R.id.status_bar_track_name, "Song Title")
+        smallView.setTextViewText(R.id.status_bar_track_name, "Song Title")
+
+        bigView.setTextViewText(R.id.status_bar_artist_name, "Artist Name")
+        smallView.setTextViewText(R.id.status_bar_artist_name, "Artist Name")
+
+        bigView.setTextViewText(R.id.status_bar_album_name, "Album Name")
     }
 
     /**
@@ -251,6 +303,12 @@ class NotificationGenerator(var notificationIntentClass: Class<*> = Notification
 
     /**
      * Retorna a Intent que será utilizada nesta notificação.
+     * Para poder recompor a estruturas das activities, é necessário declarar o parentesco no manifesto
+     * e incluir os atributos:
+     *          + launchMode="singleTask"
+     *          + taskAffinity=""
+     *          + excludeFromRecents="true"
+     * da NotificationActivity.
      * @param [context] application context for associate the notification with.
      * @return the activity associated to the notification.
      * @see [https://developer.android.com/guide/topics/ui/notifiers/notifications.html#NotificationResponse]
@@ -258,13 +316,8 @@ class NotificationGenerator(var notificationIntentClass: Class<*> = Notification
     private fun getPendingIntent(context: Context): PendingIntent {
         val resultIntent = Intent(context, notificationIntentClass)
         resultIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        // Adds the back stack
-        val stackBuilder = TaskStackBuilder.create(context)
-        stackBuilder.addParentStack(notificationIntentClass)
-        // Adds the Intent to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        // Gets a PendingIntent containing the entire back stack
-        val resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        val resultPendingIntent = PendingIntent.getActivity(context, 0,
+                resultIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         return resultPendingIntent
     }

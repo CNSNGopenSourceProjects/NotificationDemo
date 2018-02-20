@@ -9,8 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,12 +19,15 @@
 
         <activity
             android:name=".NotificationActivity"
+            android:excludeFromRecents="true"
             android:label="@string/label_activity2"
-            android:parentActivityName=".MainActivity">
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
+            android:taskAffinity="">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="br.com.conseng.notificationdemo.MainActivity" />
         </activity>
 
         <receiver android:name=".NotificationBroadcast">
