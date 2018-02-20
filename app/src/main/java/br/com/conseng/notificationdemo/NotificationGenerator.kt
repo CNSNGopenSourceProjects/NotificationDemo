@@ -18,6 +18,7 @@ const val NOTIFY_DELETE = "br.com.conseng.notificationdemo.delete"
 const val NOTIFY_PAUSE = "br.com.conseng.notificationdemo.pause"
 const val NOTIFY_PLAY = "br.com.conseng.notificationdemo.play"
 const val NOTIFY_NEXT = "br.com.conseng.notificationdemo.next"
+const val STARTFOREGROUND_ACTION = "br.com.conseng.notificationdemo.startforeground";
 
 const val NOTIFICATION_ID_REGULAR = 9
 const val NOTIFICATION_ID_BIG_CONTENT = 99
@@ -94,7 +95,7 @@ class NotificationGenerator(var notificationIntentClass: Class<*> = Notification
         }
 
         // Notification through notification manager
-        notification.flags=Notification.FLAG_ONGOING_EVENT
+        notification.flags = Notification.FLAG_ONGOING_EVENT
         notificationManager?.notify(NOTIFICATION_ID_BIG_CONTENT, notification)
     }
 
@@ -221,23 +222,27 @@ class NotificationGenerator(var notificationIntentClass: Class<*> = Notification
      * @param [context] application context for associate the notification with.
      */
     private fun setListeners(bigView: RemoteViews, smallView: RemoteViews, context: Context) {
-        val intentPrevious = Intent(NOTIFY_PREVIOUS)
-        val pendingIntentPrevious = PendingIntent.getBroadcast(context, 0, intentPrevious, PendingIntent.FLAG_UPDATE_CURRENT)
+        val intentPrevious = Intent(context, NotificationService::class.java)
+        intentPrevious.action = NOTIFY_PREVIOUS
+        val pendingIntentPrevious = PendingIntent.getService(context, 0, intentPrevious, PendingIntent.FLAG_UPDATE_CURRENT)
         bigView.setOnClickPendingIntent(R.id.status_bar_prev, pendingIntentPrevious)
         smallView.setOnClickPendingIntent(R.id.status_bar_prev, pendingIntentPrevious)
 
-        val intentDelete = Intent(NOTIFY_DELETE)
-        val pendingIntentDelete = PendingIntent.getBroadcast(context, 0, intentDelete, PendingIntent.FLAG_UPDATE_CURRENT)
+        val intentDelete = Intent(context, NotificationService::class.java)
+        intentDelete.action = NOTIFY_DELETE
+        val pendingIntentDelete = PendingIntent.getService(context, 0, intentDelete, PendingIntent.FLAG_UPDATE_CURRENT)
         bigView.setOnClickPendingIntent(R.id.status_bar_collapse, pendingIntentDelete)
         smallView.setOnClickPendingIntent(R.id.status_bar_collapse, pendingIntentDelete)
 
-        val intentNext = Intent(NOTIFY_NEXT)
-        val pendingIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, PendingIntent.FLAG_UPDATE_CURRENT)
+        val intentNext = Intent(context, NotificationService::class.java)
+        intentNext.action = NOTIFY_NEXT
+        val pendingIntentNext = PendingIntent.getService(context, 0, intentNext, PendingIntent.FLAG_UPDATE_CURRENT)
         bigView.setOnClickPendingIntent(R.id.status_bar_next, pendingIntentNext)
         smallView.setOnClickPendingIntent(R.id.status_bar_next, pendingIntentNext)
 
-        val intentPlay = Intent(NOTIFY_PLAY)
-        val pendingIntentPlay = PendingIntent.getBroadcast(context, 0, intentPlay, PendingIntent.FLAG_UPDATE_CURRENT)
+        val intentPlay = Intent(context, NotificationService::class.java)
+        intentPlay.action = NOTIFY_PLAY
+        val pendingIntentPlay = PendingIntent.getService(context, 0, intentPlay, PendingIntent.FLAG_UPDATE_CURRENT)
         bigView.setOnClickPendingIntent(R.id.status_bar_play, pendingIntentPlay)
         smallView.setOnClickPendingIntent(R.id.status_bar_play, pendingIntentPlay)
 

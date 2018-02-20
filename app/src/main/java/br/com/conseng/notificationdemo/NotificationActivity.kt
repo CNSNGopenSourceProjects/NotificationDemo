@@ -1,5 +1,6 @@
 package br.com.conseng.notificationdemo
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -16,6 +17,8 @@ class NotificationActivity : AppCompatActivity() {
     private val TAG = "Activity NOTIFICATION"
 
     private var ng: NotificationGenerator? = null
+
+    private var serviceIntent: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +40,9 @@ class NotificationActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.msg_regular_notification_sent), Toast.LENGTH_SHORT).show()
             }
             R.id.btn_music_notification -> {
+                serviceIntent = Intent(applicationContext, NotificationService::class.java)
+                serviceIntent!!.setAction(STARTFOREGROUND_ACTION)
+                startService(serviceIntent)
                 ng!!.showBigContentMusicPlayer(applicationContext)
                 Toast.makeText(this, getString(R.string.msg_big_notification_music_sent), Toast.LENGTH_SHORT).show()
             }
