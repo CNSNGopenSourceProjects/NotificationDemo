@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.os.Process       // This shouldn't be Java
 
 /**
  * Cria uma Activity inicial para verificar como se comporta uma notificação que retorna a
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity() {
      * Open the notification demo screen.
      */
     fun onClickGoToActivity2(v: View) {
-        val intent= Intent(this, NotificationActivity::class.java)
+        val intent = Intent(this, NotificationActivity::class.java)
         startActivity(intent)
     }
 
@@ -66,12 +65,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         printCurrentState("onDestroy")
-//        Process.killProcess(Process.myPid())
         super.onDestroy()
     }
 
-    private fun printCurrentState(estado:String) {
+    private fun printCurrentState(estado: String) {
         Log.d(TAG, "state=$estado")
-//        println("$TAG : state=$estado")
     }
 }

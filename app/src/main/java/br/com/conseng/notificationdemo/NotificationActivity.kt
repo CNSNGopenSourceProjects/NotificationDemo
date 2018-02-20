@@ -96,6 +96,5 @@ class NotificationActivity : AppCompatActivity() {
 
     private fun printCurrentState(estado: String) {
         Log.d(TAG, "state=$estado")
-//        println("$TAG : state=$estado")
     }
 }

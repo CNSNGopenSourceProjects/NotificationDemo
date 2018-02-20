@@ -100,38 +100,6 @@ class NotificationGenerator(var notificationIntentClass: Class<*> = Notification
     }
 
     /**
-     * Create a notification with big content (music control).
-     * The normal view layout is limited to 64dp, while the expanded view is limited to 256dp.
-     * @param [context] application context for associate the notification with.
-     * @see [https://developer.android.com/guide/topics/ui/notifiers/notifications.html#CustomNotification]
-     */
-    fun customBigNotification(context: Context) {
-        val expandedView = RemoteViews(context.packageName, R.layout.big_notification)
-        expandedView.setTextViewText(R.id.lo_text_song_name, "Adele")
-//        setListeners(expandedView, context)
-
-        // Build the content of the notification
-        val nBuilder = getNotificationBuilder(context,
-                "Music Player",
-                "Control Audio",
-                R.drawable.ic_stat_big_content,
-                "Illustrate how a big content notification can be created.")
-
-        // Notification through notification manager
-        lateinit var notification: Notification
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            nBuilder.setCustomBigContentView(expandedView)
-            notification = nBuilder.build()
-        } else {
-            notification = nBuilder.build()
-            notification.bigContentView = expandedView
-        }
-
-        // Notification through notification manager
-        notificationManager?.notify(NOTIFICATION_ID_BIG_CONTENT, notification)
-    }
-
-    /**
      * Create a notification with big text content.
      * @param [context] application context for associate the notification with.
      */
